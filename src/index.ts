@@ -1,3 +1,41 @@
+// string, boolean, number,...
+let x: number = 10
+
+x = 12
+
+console.log(x)
+
+// Inferência x Annotation
+let y = 12
+
+// y = 'teste'
+
+let z: number = 12
+
+// Tipos Básicos
+let firstName: string = 'Luciano'
+let age: number = 30
+const isAdmin: boolean = true
+
+// String != string
+
+console.log(typeof firstName)
+firstName = 'Zé'
+
+console.log(firstName)
+
+// objects
+const myNumbers: number[] = [1,2,3]
+
+console.log(myNumbers)
+// console.log(myNumbers.toUppercase())
+console.log(myNumbers.length)
+console.log(firstName.toUpperCase())
+
+myNumbers.push(5)
+
+console.log(myNumbers);
+
 // tuplas -> tuple
 let myTuple: [number, string, string[]]
 
@@ -81,7 +119,7 @@ logger('Teste')
 
 function greeting(name: string, greet?: string) {
     // if(greet) {
-    //     console.log(`Olá, ${greet} ${name}`)        
+    //     console.log(`Olá, ${greet} ${name}`)
     // } else {
     //     console.log(`Olá, ${name}`)
     // }
@@ -109,3 +147,128 @@ function multiplyNumbers(nums: MathFunctionParams) {
 }
 
 console.log(multiplyNumbers({n1: 5, n2: 10}));
+
+// Narrowing
+// checagem de tipos
+
+function doSomething(info: number | boolean) {
+    if(typeof info === 'number') {
+        console.log(`O número é ${info}`)
+    }
+
+    console.log("Não foi passado um número")
+}
+
+doSomething(5)
+doSomething(true)
+
+// Generics
+
+function showArrayItems<T>(arr: T[]){
+    arr.forEach((item) => {
+        console.log(`ITEM: ${item}`)
+    })
+}
+
+const a1 = [1, 2, 3]
+const a2 = ['a', 'b', 'c']
+
+showArrayItems(a1)
+showArrayItems(a2)
+
+// classes
+
+class User {
+    name
+    role
+    isAproved
+
+    constructor(name: string, role: string, isAproved: boolean) {
+        this.name = name
+        this.role = role
+        this.isAproved = isAproved
+    }
+
+    showUserName() {
+        console.log(`O nome do usuário é ${this.name}`)
+
+    }
+
+    showUserRole(canShow: boolean): void {
+        if(canShow) {
+            console.log(this.role);
+            return
+        }
+        console.log('Informação restrita.');
+
+    }
+}
+
+const Ze = new User('Zé', 'admin', true)
+
+console.log(Ze)
+Ze.showUserName()
+Ze.showUserRole(false)
+
+// Interfaces em classes
+interface IVehicle {
+    brand: string
+    showBrand(): void
+}
+
+class Car implements IVehicle {
+    brand
+    wheels
+
+    constructor(brand: string, wheels: number) {
+        this.brand = brand
+        this.wheels = wheels
+    }
+
+    showBrand(): void {
+        console.log(`A marca do carro é: ${this.brand}`)
+    }
+}
+
+const fusca = new Car('VW', 4)
+
+fusca.showBrand()
+
+
+// herança
+
+class SuperCar extends Car {
+    engine
+
+    constructor(brand: string, wheels: number, engine: number) {
+        super(brand, wheels)
+        this.engine = engine
+    }
+}
+
+const ferrary = new SuperCar('Ferrary', 4, 2.0)
+ferrary.showBrand()
+
+// decorators
+
+// Constructor decorator
+function BaseParameters() {
+    return function<T extends {new (...args: any[]): {}}>(constructor: T) {
+        return class extends constructor {
+            id = Math.random()
+            createdAt = new Date()
+        }
+    }
+}
+
+@BaseParameters()
+class Person {
+    name
+
+    constructor(name: string) {
+        this.name = name
+    }
+}
+
+const sam = new Person('Sam')
+console.log(sam)
